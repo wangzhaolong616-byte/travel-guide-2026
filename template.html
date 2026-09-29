@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="中国旅行宝典2026：34个省级地区×城市×区县的三级旅行攻略库，美食、景点、体验、路线、避坑一次看全。">
+<title>中国旅行宝典 · 2026版</title>
+<style>
+:root{
+  --bg:#faf7f1; --card:#ffffff; --ink:#2b2a28; --muted:#7a756c; --line:#e8e2d6;
+  --accent:#c8442c; --accent2:#2a9d8f; --shadow:0 10px 30px rgba(60,50,30,.08);
+}
+[data-theme=dark]{
+  --bg:#15161a; --card:#1e2026; --ink:#e8e4dc; --muted:#9a958b; --line:#2c2f37;
+  --accent:#e0684f; --accent2:#3fb3a4; --shadow:0 10px 30px rgba(0,0,0,.45);
+}
+.r0{--rg1:#c0392b;--rg2:#7e241a} .r1{--rg1:#2e86ab;--rg2:#1b5e7f} .r2{--rg1:#3d5a80;--rg2:#27395a}
+.r3{--rg1:#a0522d;--rg2:#6f331a} .r4{--rg1:#e76f51;--rg2:#b0432c} .r5{--rg1:#2a9d8f;--rg2:#1d6f66}
+.r6{--rg1:#9c6b4f;--rg2:#6e4230} .r7{--rg1:#6a4c93;--rg2:#47305f}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .25s,color .25s}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+/* ---------- 顶栏 ---------- */
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+@supports not (backdrop-filter:blur(10px)){.topbar{background:var(--bg)}}
+.topbar-in{display:flex;align-items:center;gap:14px;height:58px}
+.logo{font-weight:800;font-size:17px;text-decoration:none;white-space:nowrap}
+.logo-sub{font-size:12px;color:var(--accent);margin-left:6px;font-weight:700}
+.searchbox{flex:1;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.searchbox input{flex:1;border:none;outline:none;background:transparent;color:var(--ink);font-size:14px;min-width:60px}
+#qcount{font-size:12px;color:var(--muted);white-space:nowrap}
+.iconbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;cursor:pointer;font-size:14px;white-space:nowrap}
+.iconbtn b{color:var(--accent)}
+/* ---------- 首页 hero ---------- */
+.hero{padding:44px 20px 26px;text-align:center}
+.hero h1{font-size:clamp(30px,5vw,46px);margin:0 0 10px;letter-spacing:6px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900}
+.hero-sub{color:var(--muted);margin:0 0 6px;font-size:14px}
+.hero-line{color:var(--ink);margin:0;font-size:15px}
+.hero-tip{color:var(--muted);font-size:12.5px;margin:10px auto 0;max-width:760px;line-height:1.8}
+.stats{margin-top:16px;font-size:13.5px;color:var(--muted)}
+.stats b{color:var(--accent);font-size:16px}
+/* ---------- 月历 ---------- */
+.month-strip{display:flex;gap:12px;overflow-x:auto;padding:8px 20px 18px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.month-strip::-webkit-scrollbar{display:none}
+.month-card{flex:0 0 250px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.month-card.now{outline:2px solid var(--accent);outline-offset:1px}
+.m-head{display:flex;align-items:baseline;gap:8px}
+.m-head b{font-size:18px;color:var(--accent)}
+.nowtag{background:var(--accent);color:#fff;font-size:11px;border-radius:6px;padding:1px 6px}
+.m-t{font-size:13.5px;font-weight:700}
+.m-d{font-size:12.5px;color:var(--muted);line-height:1.7;margin:8px 0;min-height:42px}
+.m-ps{display:flex;flex-wrap:wrap;gap:6px}
+.mchip{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;text-decoration:none;background:var(--bg)}
+.mchip:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* ---------- 筛选 ---------- */
+.filters{padding:6px 20px 4px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;background:var(--card);color:var(--ink);font-size:13px}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sortrow{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:6px}
+.sortrow select{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 8px;font-size:13px}
+/* ---------- 卡片墙 ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:10px 20px 30px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative}
+.pcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.pcard::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:0 4px 4px 0;background:linear-gradient(180deg,var(--rg1,#c8442c),var(--rg2,#8e2f23))}
+.pc-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pc-emoji{font-size:20px}
+.grade{font-size:11.5px;padding:2px 9px;border-radius:6px;color:#fff;font-weight:700;letter-spacing:1px}
+.g0{background:#d9472f}.g1{background:#d98324}.g2{background:#3f8f6d}
+.heart{margin-left:auto;border:none;background:transparent;font-size:20px;cursor:pointer;color:#c9c4bb;transition:color .15s,transform .15s;padding:2px 4px 2px 12px}
+.heart:hover{transform:scale(1.15)}
+.heart.on{color:#e0455e}
+.pcard h3{margin:0 0 4px;font-size:21px}
+.tagline{margin:0 0 8px;font-size:13.5px;color:var(--accent);font-weight:600}
+.summary{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:12.8px;line-height:1.75;color:var(--muted);margin:0 0 10px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tags span{font-size:11.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:var(--muted)}
+.tags.big span{font-size:13px;padding:5px 12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px;color:var(--muted);margin-bottom:8px}
+.cities-preview{font-size:12px;color:var(--ink);border-top:1px dashed var(--line);padding-top:8px}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0}
+/* ---------- 详情页 ---------- */
+#detail-view{padding-bottom:40px}
+.backlink{display:inline-block;margin:16px 0 12px;font-size:13px;color:var(--muted);text-decoration:none}
+.backlink:hover{color:var(--accent)}
+.dhero{border-radius:20px;padding:26px 28px;color:#fff;background:linear-gradient(135deg,var(--rg1),var(--rg2));box-shadow:var(--shadow)}
+.dhero-top{display:flex;align-items:center;gap:10px}
+.d-emoji{font-size:24px}
+.d-region{font-size:12px;opacity:.85;border:1px solid rgba(255,255,255,.5);border-radius:6px;padding:1px 8px}
+.dhero h1{margin:10px 0 4px;font-size:clamp(28px,4vw,40px);letter-spacing:4px}
+.d-tagline{margin:0 0 12px;font-size:15px;opacity:.95}
+.d-meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;opacity:.92;margin-bottom:14px}
+.d-ops{display:flex;gap:10px;flex-wrap:wrap}
+.d-ops button{border:none;border-radius:999px;padding:9px 18px;font-size:13.5px;cursor:pointer;background:rgba(255,255,255,.92);color:#333;font-weight:700}
+.d-ops .bigheart.on{background:#e0455e;color:#fff}
+.d-ops button:hover{transform:translateY(-1px)}
+.dnav{position:sticky;top:var(--topbar-h,58px);z-index:20;display:flex;gap:8px;overflow-x:auto;background:var(--bg);padding:12px 20px;margin:0 -20px;scrollbar-width:none}
+.dnav::-webkit-scrollbar{display:none}
+.pill{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:13px;cursor:pointer}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+.dsec{margin:26px 0 34px;scroll-margin-top:calc(var(--topbar-h,58px) + var(--nav-h,50px) + 14px)}
+.dsec h2{font-size:19px;margin:0 0 12px;padding-left:12px;border-left:4px solid var(--accent)}
+.secnote{font-size:12.5px;color:var(--muted);margin:-6px 0 12px}
+.d-summary{font-size:14.5px;line-height:1.9;margin:0 0 14px}
+.freshbox{background:rgba(63,143,109,.12);border:1px solid rgba(63,143,109,.35);border-radius:14px;padding:14px 18px;margin-bottom:14px}
+.freshbox h4{margin:0 0 8px;font-size:14px;color:#2e7d5b}
+[data-theme=dark] .freshbox h4{color:#5fc39e}
+.freshbox ul{margin:0;padding-left:18px}
+.freshbox li{font-size:13px;line-height:1.8;margin:4px 0}
+details.city{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden}
+details.city>summary{display:flex;align-items:baseline;gap:10px;padding:14px 16px;cursor:pointer;list-style:none}
+details.city>summary::-webkit-details-marker{display:none}
+.city-name{font-size:17px;font-weight:800}
+.city-tagline{font-size:12.5px;color:var(--muted)}
+.chev{margin-left:auto;font-size:11px;color:var(--muted);transition:transform .2s}
+details[open].city .chev{transform:rotate(90deg)}
+.city-body{padding:2px 18px 16px;border-top:1px dashed var(--line)}
+.city-intro{font-size:13.5px;color:var(--muted);line-height:1.8}
+.city-body h5{margin:14px 0 6px;font-size:13.5px;color:var(--accent)}
+.block{background:var(--bg);border-left:3px solid var(--accent2);border-radius:0 10px 10px 0;padding:8px 12px;margin:6px 0}
+.block b{display:block;font-size:13px;margin-bottom:2px}
+.block span{font-size:12.5px;color:var(--muted);line-height:1.7}
+ul.dots{list-style:none;margin:0;padding:0}
+ul.dots li{padding:6px 0;border-bottom:1px dashed var(--line);font-size:13.5px;line-height:1.7;display:flex;flex-wrap:wrap;gap:2px 8px}
+ul.dots li:last-child{border-bottom:none}
+ul.dots li b{font-weight:700}
+ul.dots li i{font-style:normal;color:var(--muted)}
+.stay{background:var(--bg);border-radius:10px;padding:9px 12px;font-size:12.5px;color:var(--muted);line-height:1.7}
+ol.ranked{list-style:none;counter-reset:r;padding:0;margin:0;max-width:860px}
+ol.ranked li{counter-increment:r;display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line)}
+ol.ranked li::before{content:counter(r);flex:0 0 26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:2px}
+ol.ranked li div{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline}
+ol.ranked li b{font-size:14.5px}
+ol.ranked li span{font-size:12.8px;color:var(--muted);line-height:1.7}
+.tsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.ts{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tt{display:inline-block;font-size:11px;color:#fff;border-radius:5px;padding:1px 7px;margin-bottom:6px}
+.t0{background:#b8860b}.t1{background:#c8442c}.t2{background:#2e7d5b}.t3{background:#8a5a2b}.t4{background:#6a4c93}.t5{background:#2e6e9e}
+.ts b{display:block;font-size:14px;margin-bottom:4px}
+.ts p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.7}
+.expgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.exp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.exp b{display:block;font-size:14px;margin-bottom:4px;color:var(--accent)}
+.exp p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.7}
+.route{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:10px 0;max-width:860px}
+.route h4{margin:0 0 8px;font-size:15px;color:var(--accent)}
+.route ol{margin:0;padding-left:20px}
+.route li{font-size:13px;line-height:1.8;padding:3px 0;color:var(--ink)}
+.d-transport{font-size:13.5px;line-height:1.9;max-width:860px}
+ul.warnlist{list-style:none;margin:0;padding:0;max-width:860px}
+ul.warnlist li{background:rgba(217,131,36,.12);border-radius:10px;padding:10px 14px;font-size:13.5px;line-height:1.8;margin:8px 0}
+ul.warnlist li::before{content:"⚠️ ";font-size:12px}
+.mt{margin-top:26px}
+body.modal-open{overflow:hidden}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#toTop{position:fixed;right:22px;bottom:88px;z-index:39;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;width:42px;height:42px;font-size:17px;cursor:pointer;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s}
+#toTop.show{opacity:1;pointer-events:auto}
+.mini{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer}
+.mini:hover{color:var(--accent);border-color:var(--accent)}
+.prevnext{display:flex;justify-content:space-between;gap:10px;margin:6px 0 26px}
+.prevnext a{flex:1;min-width:0;text-decoration:none;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 14px;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prevnext a:hover{border-color:var(--accent);color:var(--accent)}
+.prevnext a span{display:block;font-size:11px;color:var(--muted)}
+.wcount{font-size:12px;color:var(--muted);margin:0 0 6px}
+/* ---------- 足迹地图与出行清单 ---------- */
+#pbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:70;transition:width .1s linear}
+.tmap{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-width:600px;margin:14px auto 10px}
+.tcell{aspect-ratio:1;border-radius:9px;border:1px solid var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12.5px;cursor:pointer;user-select:none;position:relative;transition:transform .12s,background .15s,color .15s}
+.tcell:hover{transform:scale(1.1);z-index:2}
+.tcell.on{background:linear-gradient(135deg,var(--rg1,#2a9d8f),var(--rg2));color:#fff;border-color:transparent;font-weight:700}
+.tcell.on::after{content:"✓";position:absolute;top:2px;right:4px;font-size:9px;opacity:.85}
+.tcell.wishmark{border:1.5px dashed var(--accent2);color:var(--accent2)}
+.tcell.blank{visibility:hidden;pointer-events:none}
+.tstats{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;font-size:13.5px;color:var(--muted);margin:4px 0}
+.tstats b{color:var(--accent);font-size:16px}
+.achv{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 2px}
+.badge{border:1px dashed var(--line);border-radius:12px;padding:7px 11px;font-size:12px;color:var(--muted);background:var(--card)}
+.badge.on{border:1px solid var(--accent2);color:var(--ink);background:rgba(63,143,109,.12);font-weight:600}
+.tlegend{text-align:center;font-size:11.5px;color:var(--muted);margin:2px 0}
+.pk-group{margin:12px 0 4px;font-size:13.5px;color:var(--accent);font-weight:700}
+.pk{display:flex;gap:9px;align-items:flex-start;padding:5px 0;font-size:13.5px;cursor:pointer;border-bottom:1px dashed var(--line)}
+.pk:last-child{border-bottom:none}
+.pk input{accent-color:var(--accent);margin-top:3px;flex:0 0 auto}
+.pk.done span{color:var(--muted);text-decoration:line-through}
+.modal-ops #tCopy,.modal-ops #pkCopy{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* ---------- 悬浮与弹窗 ---------- */
+.fab{position:fixed;right:22px;bottom:26px;z-index:40;border:none;border-radius:999px;padding:13px 20px;background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(200,68,44,.4)}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-card{background:var(--card);border-radius:16px;padding:22px;max-width:540px;width:100%;max-height:74vh;overflow:auto}
+.modal-card h3{margin:0 0 14px;font-size:17px}
+.wishrow{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.wishrow a{text-decoration:none;font-weight:700}
+.wishrow span{flex:1;font-size:12px;color:var(--muted)}
+.wishrow button{border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:8px;padding:3px 10px;cursor:pointer;font-size:12px}
+.modal-ops{display:flex;gap:10px;margin-top:16px}
+.modal-ops button{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:9px 0;cursor:pointer;font-size:13.5px}
+.modal-ops #wishCopy{background:var(--accent);color:#fff;border-color:var(--accent)}
+#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#333;color:#fff;padding:9px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
+#toast.show{opacity:.95}
+footer{border-top:1px solid var(--line);padding:22px 20px 96px;color:var(--muted);font-size:12px;line-height:2;text-align:center}
+@media (max-width:720px){
+  .topbar-in{flex-wrap:wrap;height:auto;padding:8px 0;row-gap:8px}
+  .searchbox{order:3;flex-basis:100%}
+  .dnav{margin:0 -14px;padding:10px 14px}
+  .grid{grid-template-columns:1fr;padding:10px 14px 30px}
+  .month-strip,.filters{padding-left:14px;padding-right:14px}
+  .wrap{padding:0 14px}
+  .hero{padding:34px 14px 20px}
+  .fab{right:14px;bottom:18px}
+  #toTop{right:14px;bottom:76px}
+}
+@media print{.topbar,.fab,.filters,.month-strip,.dnav,.d-ops,.backlink,.prevnext,#toTop,#qcount{display:none!important}.pcard{break-inside:avoid}#detail-view .wrap{max-width:100%}}
+</style>
+</head>
+<body>
+<div id="pbar"></div>
+
+<header class="topbar"><div class="wrap topbar-in">
+  <a class="logo" href="#/">🧭 中国旅行宝典<span class="logo-sub">2026版</span></a>
+  <div class="searchbox">
+    <input id="q" placeholder="搜省份 / 城市 / 美食 / 景点…（回车直达最佳匹配）">
+    <span id="qcount"></span>
+  </div>
+  <button id="randBtn" class="iconbtn" title="随机抽一个目的地">🎲</button>
+  <button id="mapBtn" class="iconbtn" title="我的中国足迹与成就">🗺️ 足迹</button>
+  <button id="themeBtn" class="iconbtn" title="切换深色/浅色">🌙</button>
+  <button id="wishBtn" class="iconbtn" title="我的想去清单">❤️ 清单 <b id="wishN">0</b></button>
+</div></header>
+
+<div id="home-view">
+  <section class="hero">
+    <h1>中国旅行宝典</h1>
+    <p class="hero-sub">2026 版 · 省 → 城市 → 区县 三级旅行攻略库</p>
+    <p class="hero-line">吃 · 玩 · 看 · 住 · 行 · 避坑 —— 未点开是简介，点开是全套攻略</p>
+    <p class="hero-tip">点任意省份卡片展开全套攻略（城市、区县板块、美食榜、景点榜、体验、路线、交通、避坑、最新动态）；右上角 ❤ 收藏"想去"、🗺️ 点亮足迹解锁成就、🎲 随机抽目的地；详情页可生成 🧳 智能出行清单、←/→ 键翻省、Ctrl+P 存 PDF；搜索支持菜名/景点/拼音（如 sichuan）；底部月历告诉你"这个月去哪"。</p>
+    <div class="stats" id="stats"></div>
+  </section>
+  <section id="monthStrip" class="month-strip"></section>
+  <section class="filters">
+    <div class="chiprow" id="regionChips"></div>
+    <div class="chiprow" id="themeChips"></div>
+    <div class="sortrow"><label>排序</label>
+      <select id="sortSel">
+        <option value="rec">综合推荐</option>
+        <option value="grade">按评级</option>
+        <option value="name">按地理顺序</option>
+      </select>
+    </div>
+  </section>
+  <section id="grid" class="grid"></section>
+  <footer>
+    《中国旅行宝典 2026》· 单文件离线版 · 数据基于截至 2026 年 9 月 28 日的公开资料（文旅部公告、铁路开通信息、主流旅游平台趋势报告等）整理编写。<br>
+    票价、开放时间、预约政策以官方与景区当日公告为准；本册无任何商业推广，纯攻略用途。支持深色模式、收藏清单、一键复制攻略，可拷贝到手机/平板浏览器打开。
+  </footer>
+</div>
+
+<div id="detail-view" hidden></div>
+
+<div id="wishModal" class="modal" hidden>
+  <div class="modal-card">
+    <h3>❤️ 我的想去清单</h3>
+    <div id="wishList"></div>
+    <div class="modal-ops">
+      <button id="wishCopy">⧉ 复制清单</button>
+      <button id="wishClear">🗑 清空</button>
+      <button id="wishClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="mapModal" class="modal" hidden>
+  <div class="modal-card">
+    <h3>🗺️ 我的中国足迹</h3>
+    <div class="tstats" id="tstats"></div>
+    <div class="tlegend">点击瓦片点亮/取消去过的省份 · 虚线框=想去 · 数据保存在本机</div>
+    <div class="tmap" id="tmap"></div>
+    <div class="achv" id="achv"></div>
+    <div class="modal-ops">
+      <button id="tCopy">⧉ 复制旅行报告</button>
+      <button id="tClear">🗑 清空</button>
+      <button id="tClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="packModal" class="modal" hidden>
+  <div class="modal-card">
+    <h3 id="packTitle">🧳 出行清单</h3>
+    <div id="packBody"></div>
+    <div class="modal-ops">
+      <button id="pkCopy">⧉ 复制清单</button>
+      <button id="pkClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<button id="fab" class="fab" hidden>❤️ <span id="fabN">0</span></button>
+<button id="toTop" title="回到顶部">⬆</button>
+<div id="toast"></div>
+
+<script>
+const DATA=__DATA__;
+const CALENDAR=__CALENDAR__;
+const REGION_ORDER=["华北","东北","华东","华中","华南","西南","西北","港澳台"];
+const GRADE_RANK={"顶流必去":0,"黑马新贵":1,"小众宝藏":2};
+const ORDER=["北京","天津","河北","山西","内蒙古","辽宁","吉林","黑龙江","上海","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东","广西","海南","重庆","四川","贵州","云南","西藏","陕西","甘肃","青海","宁夏","新疆","香港","澳门","台湾"];
+const TS={"世界遗产":0,"5A景区":1,"自然奇观":2,"人文古迹":3,"小众秘境":4,"主题乐园":5};
+
+let state={region:"全部",theme:"全部",q:"",sort:"rec"};
+let homeScroll=0;
+let curDetail=null;
+let wish=[];
+try{wish=JSON.parse(localStorage.getItem("ctw_wish")||"[]")||[];}catch(e){wish=[];}
+wish=wish.filter(n=>DATA.some(d=>d.name===n));
+
+DATA.forEach(d=>{
+  d._search=[d.name,d.py||"",d.tagline,d.grade,d.region,(d.tags||[]).join(" "),d.summary||"",
+    (d.cities||[]).map(c=>[c.name,c.tagline,c.intro,(c.sights||[]).join(" "),(c.food||[]).join(" "),(c.districts||[]).map(b=>b.name).join(" ")].join(" ")).join(" "),
+    (d.signatureFood||[]).map(f=>f.name).join(" "),(d.topSights||[]).map(s=>s.name).join(" "),(d.experiences||[]).map(x=>x.name).join(" ")
+  ].join(" ").toLowerCase();
+});
+
+const $=id=>document.getElementById(id);
+const homeView=$("home-view"),detailView=$("detail-view"),grid=$("grid"),qEl=$("q"),qCount=$("qcount");
+const fab=$("fab"),fabN=$("fabN"),wishN=$("wishN"),toastEl=$("toast");
+
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+function sortList(list){
+  const c=list.slice();
+  if(state.sort==="rec")return c.sort((a,b)=>(REGION_ORDER.indexOf(a.region)-REGION_ORDER.indexOf(b.region))||(GRADE_RANK[a.grade]-GRADE_RANK[b.grade])||(ORDER.indexOf(a.name)-ORDER.indexOf(b.name)));
+  if(state.sort==="grade")return c.sort((a,b)=>(GRADE_RANK[a.grade]-GRADE_RANK[b.grade])||(ORDER.indexOf(a.name)-ORDER.indexOf(b.name)));
+  return c.sort((a,b)=>ORDER.indexOf(a.name)-ORDER.indexOf(b.name));
+}
+function applyFilters(){
+  let list=DATA.filter(d=>(state.region==="全部"||d.region===state.region)&&(state.theme==="全部"||(d.tags||[]).includes(state.theme)));
+  if(state.q){const q=state.q.toLowerCase();list=list.filter(d=>d._search.includes(q));}
+  return sortList(list);
+}
+function cardHTML(d){
+  const inW=wish.includes(d.name);
+  const cs=(d.cities||[]).slice(0,4).map(c=>c.name).join(" · ");
+  return '<article class="pcard r'+REGION_ORDER.indexOf(d.region)+'" data-k="'+esc(d.name)+'">'
+    +'<div class="pc-top"><span class="pc-emoji">'+esc(d.emoji)+'</span><span class="grade g'+(GRADE_RANK[d.grade]||0)+'">'+esc(d.grade)+'</span>'
+    +'<button class="heart'+(inW?" on":"")+'" data-w="'+esc(d.name)+'" title="加入/移出想去清单">♥</button></div>'
+    +"<h3>"+esc(d.name)+"</h3>"
+    +'<p class="tagline">'+esc(d.tagline)+"</p>"
+    +'<p class="summary">'+esc(d.summary)+"</p>"
+    +'<div class="tags">'+(d.tags||[]).map(t=>"<span>"+esc(t)+"</span>").join("")+"</div>"
+    +'<div class="meta"><span>🗓 '+esc(d.bestSeason)+"</span><span>⏱ "+esc(d.suggestedDays)+"</span><span>💰 "+esc(d.budget)+"</span></div>"
+    +'<div class="cities-preview">重点：'+esc(cs)+((d.cities||[]).length>4?" …":"")+"</div></article>";
+}
+function renderGrid(){
+  const list=applyFilters();
+  grid.innerHTML=list.length?list.map(cardHTML).join(""):'<p class="empty">没有匹配的地区，换个关键词试试～</p>';
+  qCount.textContent=state.q?("→ "+list.length+" 个地区匹配"):"";
+}
+/* ---------- 筛选 chips ---------- */
+function bindChips(el,cb){
+  el.addEventListener("click",e=>{
+    const b=e.target.closest(".chip");if(!b)return;
+    el.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));
+    cb(b.dataset.v);renderGrid();
+  });
+}
+function renderRegionChips(){
+  $("regionChips").innerHTML=['全部'].concat(REGION_ORDER).map(r=>'<button class="chip'+(r==="全部"?" on":"")+'" data-v="'+r+'">'+r+'</button>').join("");
+}
+function renderThemeChips(){
+  const freq={};DATA.forEach(d=>(d.tags||[]).forEach(t=>freq[t]=(freq[t]||0)+1));
+  const top=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,12).map(e=>e[0]);
+  $("themeChips").innerHTML='<button class="chip on" data-v="全部">全部主题</button>'+top.map(t=>'<button class="chip" data-v="'+esc(t)+'">'+esc(t)+"</button>").join("");
+}
+/* ---------- 月历 ---------- */
+function renderMonths(){
+  const cm=new Date().getMonth()+1;
+  $("monthStrip").innerHTML=CALENDAR.map(m=>
+    '<div class="month-card'+(m.m===cm?" now":"")+'"><div class="m-head"><b>'+m.m+"月</b>"+(m.m===cm?'<span class="nowtag">本月</span>':"")+'<span class="m-t">'+esc(m.t)+'</span></div><p class="m-d">'+esc(m.d)+'</p><div class="m-ps">'+m.ps.map(p=>'<a class="mchip" href="#/p/'+encodeURIComponent(p)+'">'+esc(p)+"</a>").join("")+"</div></div>"
+  ).join("");
+  const nowCard=$("monthStrip").querySelector(".month-card.now");
+  if(nowCard)$("monthStrip").scrollLeft=Math.max(0,nowCard.offsetLeft-$("monthStrip").offsetLeft-16);
+}
+/* ---------- 统计 ---------- */
+function fillStats(){
+  const nc=DATA.reduce((s,d)=>s+(d.cities||[]).length,0);
+  const nd=DATA.reduce((s,d)=>s+(d.cities||[]).reduce((t,c)=>t+((c.districts||[]).length),0),0);
+  const ni=DATA.reduce((s,d)=>s+(d.signatureFood||[]).length+(d.topSights||[]).length+(d.experiences||[]).length+(d.souvenirs||[]).length+(d.cities||[]).reduce((t,c)=>t+(c.sights||[]).length+(c.food||[]).length,0),0);
+  $("stats").innerHTML="<b>"+DATA.length+"</b> 个省级地区 · <b>"+nc+"</b> 座城市 · <b>"+nd+"</b> 个区县/板块 · <b>"+ni+"</b> 条吃住玩条目";
+}
+/* ---------- 详情页 ---------- */
+function fmtItem(s){
+  const m=/^(.+?)（(.+?)）$/.exec(s||"");
+  return m?"<b>"+esc(m[1])+"</b><i>"+esc(m[2])+"</i>":"<b>"+esc(s)+"</b>";
+}
+function cityHTML(c,open){
+  const ds=c.districts||[];
+  return '<details class="city"'+(open?" open":"")+'>'
+    +"<summary><span class=\"city-name\">"+esc(c.name)+'</span><span class="city-tagline">'+esc(c.tagline)+'</span><span class="chev">▶</span></summary>'
+    +'<div class="city-body"><p class="city-intro">'+esc(c.intro)+"</p>"
+    +(ds.length?'<h5>📍 区县 · 板块</h5>'+ds.map(b=>'<div class="block"><b>'+esc(b.name)+"</b><span>"+esc(b.note)+"</span></div>").join(""):"")
+    +"<h5>🏞️ 怎么玩</h5>"+'<ul class="dots">'+(c.sights||[]).map(s=>"<li>"+fmtItem(s)+"</li>").join("")+"</ul>"
+    +"<h5>🍜 吃什么</h5>"+'<ul class="dots">'+(c.food||[]).map(s=>"<li>"+fmtItem(s)+"</li>").join("")+"</ul>"
+    +((c.foodStreets||[]).length?"<h5>🛒 觅食街区</h5>"+'<ul class="dots">'+c.foodStreets.map(s=>"<li>"+fmtItem(s)+"</li>").join("")+"</ul>":"")
+    +'<p class="stay">🛏️ 住宿：'+esc(c.stay)+"</p></div></details>";
+}
+function detailHTML(d){
+  const ri=REGION_ORDER.indexOf(d.region),gr=GRADE_RANK[d.grade]||0,inW=wish.includes(d.name);
+  const nav=[["概览","s-ov"],["城市与区县","s-city"],["美食榜","s-food"],["景点榜","s-sight"],["体验","s-exp"],["路线","s-route"],["交通","s-go"],["避坑/伴手礼","s-tip"]];
+  return '<div class="wrap"><a class="backlink" href="#/">← 返回全部地区</a>'
+    +'<div class="dhero r'+ri+'"><div class="dhero-top"><span class="d-emoji">'+esc(d.emoji)+'</span><span class="grade g'+gr+'">'+esc(d.grade)+'</span><span class="d-region">'+esc(d.region)+"</span></div>"
+    +"<h1>"+esc(d.name)+"</h1>"
+    +'<p class="d-tagline">'+esc(d.tagline)+"</p>"
+    +'<div class="d-meta"><span>🗓 '+esc(d.bestSeason)+"</span><span>⏱ "+esc(d.suggestedDays)+"</span><span>💰 "+esc(d.budget)+"</span></div>"
+    +'<div class="d-ops"><button class="bigheart'+(inW?" on":"")+'" data-w="'+esc(d.name)+'">♥ 想去</button><button class="copybtn" data-cp="'+esc(d.name)+'">⧉ 复制本省攻略</button><button class="packbtn" data-pk="'+esc(d.name)+'">🧳 出行清单</button></div></div>'
+    +'<nav class="dnav">'+nav.map(p=>'<button class="pill" data-t="'+p[1]+'">'+p[0]+"</button>").join("")+"</nav>"
+    +detailSections(d)+prevNextHTML(d)+'</div>';
+}
+function prevNextHTML(d){
+  const i=ORDER.indexOf(d.name),pn=i>0?ORDER[i-1]:null,nx=(i>=0&&i<ORDER.length-1)?ORDER[i+1]:null;
+  return '<div class="prevnext">'
+    +(pn?'<a href="#/p/'+encodeURIComponent(pn)+'"><span>← 上一个地区</span>'+esc(pn)+"</a>":"<span></span>")
+    +(nx?'<a style="text-align:right" href="#/p/'+encodeURIComponent(nx)+'"><span>下一个地区 →</span>'+esc(nx)+"</a>":"<span></span>")
+    +"</div>";
+}
+function detailSections(d){
+  const fresh=d.fresh||[];
+  return '<section class="dsec" id="s-ov"><h2>概览</h2><p class="d-summary">'+esc(d.summary)+"</p>"
+    +(fresh.length?'<div class="freshbox"><h4>🆕 最新动态（2023-2026）</h4><ul>'+fresh.map(f=>"<li>"+esc(f)+"</li>").join("")+"</ul></div>":"")
+    +'<div class="tags big">'+(d.tags||[]).map(t=>"<span>"+esc(t)+"</span>").join("")+"</div></section>"
+    +'<section class="dsec" id="s-city"><h2>城市与区县</h2><p class="secnote">点击城市展开：区县板块 / 怎么玩 / 吃什么 / 住宿建议　<button class="mini" id="expAll">⊕ 展开全部</button> <button class="mini" id="colAll">⊖ 收起全部</button></p>'+(d.cities||[]).map((c,i)=>cityHTML(c,i===0)).join("")+"</section>"
+    +'<section class="dsec" id="s-food"><h2>省级美食榜</h2><ol class="ranked">'+(d.signatureFood||[]).map(f=>"<li><div><b>"+esc(f.name)+"</b><span>"+esc(f.desc)+"</span></div></li>").join("")+"</ol></section>"
+    +'<section class="dsec" id="s-sight"><h2>景点榜</h2><div class="tsgrid">'+(d.topSights||[]).map(s=>'<div class="ts"><span class="tt t'+(TS[s.type]!=null?TS[s.type]:4)+'">'+esc(s.type)+"</span><b>"+esc(s.name)+"</b><p>"+esc(s.desc)+"</p></div>").join("")+"</div></section>"
+    +'<section class="dsec" id="s-exp"><h2>特色体验 · 演出 · 夜生活</h2><div class="expgrid">'+(d.experiences||[]).map(x=>'<div class="exp"><b>'+esc(x.name)+"</b><p>"+esc(x.desc)+"</p></div>").join("")+"</div></section>"
+    +'<section class="dsec" id="s-route"><h2>路线推荐</h2>'+(d.routes||[]).map(r=>'<div class="route"><h4>'+esc(r.title)+"</h4><ol>"+(r.days||[]).map(dd=>"<li>"+esc(dd)+"</li>").join("")+"</ol></div>").join("")+"</section>"
+    +'<section class="dsec" id="s-go"><h2>交通与预算</h2><p class="d-transport">'+esc(d.transport)+"</p></section>"
+    +'<section class="dsec" id="s-tip"><h2>避坑指南</h2><ul class="warnlist">'+(d.pitfalls||[]).map(p=>"<li>"+esc(p)+"</li>").join("")+"</ul>"
+    +'<h3 class="mt">🛍️ 伴手礼清单</h3><ul class="dots">'+(d.souvenirs||[]).map(s=>"<li>"+fmtItem(s)+"</li>").join("")+"</ul></section>";
+}
+function openDetail(name){
+  const d=DATA.find(x=>x.name===name);if(!d){location.hash="#/";return;}
+  if(!homeView.hidden)homeScroll=window.scrollY;
+  detailView.innerHTML=detailHTML(d);
+  homeView.hidden=true;detailView.hidden=false;window.scrollTo({top:0,left:0,behavior:"instant"});
+  document.title=name+" · 中国旅行宝典2026";
+  detailView.querySelector(".dnav").addEventListener("click",e=>{
+    const b=e.target.closest(".pill");if(!b)return;
+    const t=document.getElementById(b.dataset.t);if(t)t.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  const cp=detailView.querySelector(".copybtn");
+  if(cp)cp.addEventListener("click",()=>copyProvince(d));
+  const pkb=detailView.querySelector(".packbtn");
+  if(pkb)pkb.addEventListener("click",()=>openPack(d.name));
+  curDetail=name;
+  const exp=detailView.querySelector("#expAll"),col=detailView.querySelector("#colAll");
+  if(exp)exp.addEventListener("click",()=>detailView.querySelectorAll("details.city").forEach(x=>x.open=true));
+  if(col)col.addEventListener("click",()=>detailView.querySelectorAll("details.city").forEach(x=>x.open=false));
+  syncHeights();
+}
+/* ---------- 想去清单 ---------- */
+function updateFab(){fabN.textContent=wish.length;wishN.textContent=wish.length;fab.hidden=!wish.length;}
+function toggleWish(name){
+  const i=wish.indexOf(name);
+  if(i>=0){wish.splice(i,1);toast("已从清单移除："+name);}else{wish.push(name);toast("已加入想去清单："+name);}
+  try{localStorage.setItem("ctw_wish",JSON.stringify(wish));}catch(e){}
+  document.querySelectorAll("[data-w]").forEach(b=>b.classList.toggle("on",wish.includes(b.dataset.w)));
+  updateFab();
+}
+function renderWishList(){
+  const el=$("wishList");
+  if(!wish.length){el.innerHTML='<p class="empty">还没有收藏，去卡片上点 ♥ 收藏想去的地方吧。</p>';return;}
+  el.innerHTML='<p class="wcount">共 '+wish.length+' 个目的地，点击名称直达攻略。</p>'+wish.map(n=>{const d=DATA.find(x=>x.name===n);
+    return '<div class="wishrow"><a href="#/p/'+encodeURIComponent(n)+'">'+esc(d?d.emoji:"")+" "+esc(n)+"</a><span>"+esc(d?d.tagline:"")+'</span><button data-rm="'+esc(n)+'">移除</button></div>';}).join("");
+}
+/* ---------- 复制 ---------- */
+function clip(txt){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>toast("已复制，可粘贴到备忘录/微信"),()=>fallbackCopy(txt));
+  }else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");toast("已复制");}catch(e){toast("复制失败，请手动选择");}
+  ta.remove();
+}
+function copyProvince(d){
+  const L=[];
+  L.push("【"+d.name+"】"+(d.tagline||"")+"（"+d.grade+"）");
+  L.push(d.summary||"");
+  L.push("最佳季节："+d.bestSeason+"｜建议天数："+d.suggestedDays+"｜预算："+d.budget);
+  L.push("");
+  L.push("◆ 城市：");
+  (d.cities||[]).forEach(c=>{
+    L.push("· "+c.name+"｜"+(c.tagline||""));
+    L.push("  玩："+(c.sights||[]).slice(0,6).join("；"));
+    L.push("  吃："+(c.food||[]).slice(0,6).join("；"));
+  });
+  L.push("");
+  L.push("◆ 美食榜："+(d.signatureFood||[]).map(f=>f.name).join("、"));
+  L.push("◆ 景点榜："+(d.topSights||[]).map(s=>s.name).join("、"));
+  L.push("◆ 体验："+(d.experiences||[]).map(x=>x.name).join("、"));
+  L.push("◆ 避坑："+(d.pitfalls||[]).join("；"));
+  L.push("");
+  L.push("—— 摘自《中国旅行宝典 2026》");
+  clip(L.join("\n"));
+}
+/* ---------- toast / 弹窗 ---------- */
+let toastTimer=null;
+function toast(msg){
+  toastEl.textContent=msg;toastEl.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove("show"),1800);
+}
+function openWish(){renderWishList();$("wishModal").hidden=false;document.body.classList.add("modal-open");}
+function closeWish(){$("wishModal").hidden=true;$("mapModal").hidden=true;$("packModal").hidden=true;document.body.classList.remove("modal-open");}
+/* ---------- 路由 ---------- */
+function route(){
+  closeWish();
+  const m=location.hash.match(/^#\/p\/(.+)$/);
+  if(m){
+    let name=null;
+    try{name=decodeURIComponent(m[1]);}catch(err){}
+    const d=name&&DATA.find(x=>x.name===name);
+    if(d){openDetail(name);return;}
+  }
+  detailView.hidden=true;homeView.hidden=false;renderGrid();
+  curDetail=null;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:homeScroll,left:0,behavior:"instant"})));
+  document.title="中国旅行宝典 · 2026版";
+}
+/* ---------- 事件 ---------- */
+grid.addEventListener("click",e=>{
+  if(e.target.closest(".heart"))return;
+  const card=e.target.closest(".pcard");
+  if(card)location.hash="#/p/"+encodeURIComponent(card.dataset.k);
+});
+document.addEventListener("click",e=>{
+  if(e.target.closest("#wishList a")){closeWish();return;}
+  const w=e.target.closest("[data-w]");
+  if(w){toggleWish(w.dataset.w);return;}
+  const rm=e.target.closest("[data-rm]");
+  if(rm){toggleWish(rm.dataset.rm);renderWishList();}
+});
+qEl.addEventListener("input",()=>{state.q=qEl.value.trim();renderGrid();});
+qEl.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&state.q){const l=applyFilters();if(l.length)location.hash="#/p/"+encodeURIComponent(l[0].name);}
+  if(e.key==="Escape"){qEl.value="";state.q="";renderGrid();qEl.blur();}
+});
+bindChips($("regionChips"),v=>state.region=v);
+bindChips($("themeChips"),v=>state.theme=v);
+$("sortSel").addEventListener("change",e=>{state.sort=e.target.value;renderGrid();});
+$("themeBtn").addEventListener("click",()=>setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark"));
+$("wishBtn").addEventListener("click",openWish);
+fab.addEventListener("click",openWish);
+$("wishClose").addEventListener("click",closeWish);
+$("wishModal").addEventListener("click",e=>{if(e.target===$("wishModal"))closeWish();});
+$("wishCopy").addEventListener("click",()=>{
+  if(!wish.length){toast("清单是空的");return;}
+  clip("我的想去清单：\n"+wish.map(n=>{const d=DATA.find(x=>x.name===n);return "· "+n+"（"+(d?d.tagline||"":"")+"）";}).join("\n"));
+});
+$("wishClear").addEventListener("click",()=>{
+  if(!wish.length)return;
+  if(confirm("确定清空想去清单？")){wish=[];try{localStorage.setItem("ctw_wish","[]");}catch(e){}renderWishList();document.querySelectorAll("[data-w]").forEach(b=>b.classList.remove("on"));updateFab();}
+});
+document.addEventListener("keydown",e=>{
+  const typing=document.activeElement&&/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+  if(e.key==="Escape"){closeWish();return;}
+  if(typing)return;
+  if(e.key==="/"){e.preventDefault();if(detailView.hidden)qEl.focus();return;}
+  if(!detailView.hidden&&(e.key==="ArrowLeft"||e.key==="ArrowRight")&&curDetail){
+    const i=ORDER.indexOf(curDetail),ni=e.key==="ArrowLeft"?i-1:i+1;
+    if(ni>=0&&ni<ORDER.length)location.hash="#/p/"+encodeURIComponent(ORDER[ni]);
+  }
+});
+function setTheme(t){
+  document.documentElement.setAttribute("data-theme",t);
+  try{localStorage.setItem("ctw_theme",t);}catch(e){}
+  $("themeBtn").textContent=t==="dark"?"☀️":"🌙";
+}
+const toTopBtn=$("toTop");
+window.addEventListener("scroll",()=>{
+  toTopBtn.classList.toggle("show",window.scrollY>600);
+  const bar=$("pbar");
+  if(!detailView.hidden){
+    const max=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(max>0?Math.min(100,window.scrollY/max*100):0)+"%";
+  }else bar.style.width="0";
+},{passive:true});
+toTopBtn.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
+$("randBtn").addEventListener("click",()=>{
+  const d=DATA[Math.floor(Math.random()*DATA.length)];
+  toast("🎲 随机到："+d.name+"，出发！");
+  location.hash="#/p/"+encodeURIComponent(d.name);
+});
+let printOpened=[];
+window.addEventListener("beforeprint",()=>{printOpened=Array.from(document.querySelectorAll("details.city:not([open])"));printOpened.forEach(x=>x.open=true);});
+window.addEventListener("afterprint",()=>{printOpened.forEach(x=>x.open=false);printOpened=[];});
+window.addEventListener("resize",syncHeights);
+/* ---------- 足迹地图 · 成就 · 出行清单 ---------- */
+const TILE_LAYOUT=[
+  ["新疆",null,"甘肃","内蒙古",null,"黑龙江",null,null],
+  ["西藏","青海","宁夏","陕西","山西","河北","北京","吉林"],
+  [null,"四川","重庆","河南","山东","天津","辽宁",null],
+  [null,"云南","贵州","湖北","安徽","江苏","上海",null],
+  [null,null,"广西","湖南","江西","浙江","福建","台湾"],
+  [null,null,null,"广东","香港",null,null,null],
+  [null,null,null,"澳门","海南",null,null,null]
+];
+const ACHIEVEMENTS=[
+  {id:"first",n:"🌱 初出茅庐",d:"点亮第1个省份",t:()=>visited.length>=1},
+  {id:"five",n:"🧭 小有阅历",d:"点亮5个省份",t:()=>visited.length>=5},
+  {id:"half",n:"🏔️ 山河过半",d:"点亮17个省份",t:()=>visited.length>=17},
+  {id:"regions",n:"🗺️ 区域制霸",d:"八大地理区各点亮至少1省",t:()=>REGION_ORDER.every(r=>DATA.some(x=>x.region===r&&visited.includes(x.name)))},
+  {id:"wish10",n:"❤️ 种草大师",d:"想去清单收藏10个目的地",t:()=>wish.length>=10},
+  {id:"all",n:"🎖️ 全国大满贯",d:"点亮全部34个省级地区",t:()=>visited.length>=34}
+];
+let visited=[];
+try{visited=JSON.parse(localStorage.getItem("ctw_visited")||"[]")||[];}catch(e){visited=[];}
+visited=visited.filter(n=>DATA.some(d=>d.name===n));
+let unlockedAchv=new Set();
+try{unlockedAchv=new Set(JSON.parse(localStorage.getItem("ctw_achv")||"[]"));}catch(e){unlockedAchv=new Set();}
+function tileRegion(name){const d=DATA.find(x=>x.name===name);return d?REGION_ORDER.indexOf(d.region):0;}
+function achvUnlocked(){return ACHIEVEMENTS.filter(a=>{try{return a.t();}catch(e){return false;}}).map(a=>a.id);}
+function renderMapModal(){
+  const n=visited.length,pct=Math.round(n/34*100);
+  $("tstats").innerHTML="<span>已点亮 <b>"+n+"</b> / 34</span><span>足迹覆盖 <b>"+pct+"%</b></span><span>想去 <b>"+wish.length+"</b> 个</span><span>成就 <b>"+achvUnlocked().length+"</b> / "+ACHIEVEMENTS.length+"</span>";
+  $("tmap").innerHTML=TILE_LAYOUT.map(row=>row.map(c=>c
+    ?('<div class="tcell'+(visited.includes(c)?" on":(wish.includes(c)?" wishmark":""))+' r'+tileRegion(c)+'" data-t="'+esc(c)+'" title="'+esc(c)+'（点击点亮/取消）">'+esc(c)+"</div>")
+    :'<div class="tcell blank"></div>').join("")).join("");
+  const un=achvUnlocked();
+  $("achv").innerHTML=ACHIEVEMENTS.map(a=>'<div class="badge'+(un.includes(a.id)?" on":"")+'" title="'+esc(a.d)+'">'+a.n+"</div>").join("");
+}
+function toggleVisited(name){
+  const i=visited.indexOf(name);
+  if(i>=0)visited.splice(i,1);else visited.push(name);
+  try{localStorage.setItem("ctw_visited",JSON.stringify(visited));}catch(e){}
+  const now=achvUnlocked(),fresh=now.filter(id=>!unlockedAchv.has(id));
+  fresh.forEach(id=>{const a=ACHIEVEMENTS.find(x=>x.id===id);if(a)toast("🏆 解锁成就："+a.n);});
+  unlockedAchv=new Set(now);
+  try{localStorage.setItem("ctw_achv",JSON.stringify(now));}catch(e){}
+  renderMapModal();
+}
+$("mapBtn").addEventListener("click",()=>{renderMapModal();$("mapModal").hidden=false;document.body.classList.add("modal-open");});
+$("tClose").addEventListener("click",closeWish);
+$("tClear").addEventListener("click",()=>{
+  if(!visited.length)return;
+  if(confirm("确定清空全部足迹与成就进度？")){visited=[];unlockedAchv=new Set();try{localStorage.removeItem("ctw_visited");localStorage.removeItem("ctw_achv");}catch(e){}renderMapModal();}
+});
+$("mapModal").addEventListener("click",e=>{if(e.target===$("mapModal"))closeWish();});
+$("tmap").addEventListener("click",e=>{const c=e.target.closest(".tcell[data-t]");if(c)toggleVisited(c.dataset.t);});
+$("tCopy").addEventListener("click",()=>{
+  const n=visited.length,pct=Math.round(n/34*100),un=achvUnlocked();
+  clip(["🗺️ 我的中国足迹（中国旅行宝典2026）",
+    "已点亮 "+n+"/34 个省级地区，足迹覆盖 "+pct+"%",
+    "已去："+(visited.join("、")||"暂无"),
+    "想去清单："+(wish.length?wish.join("、"):"暂无"),
+    "成就 "+un.length+"/"+ACHIEVEMENTS.length+"："+(ACHIEVEMENTS.filter(a=>un.includes(a.id)).map(a=>a.n).join("、")||"暂无")].join("\n"));
+});
+/* ---------- 出行清单 ---------- */
+let packProv=null;
+function packGroups(name){
+  const d=DATA.find(x=>x.name===name);if(!d)return[];
+  const t=d.tags||[];
+  let doc="身份证件";
+  if(name==="香港"||name==="澳门")doc="港澳通行证及有效签注";
+  else if(name==="台湾")doc="两岸通行证件（以最新政策为准）";
+  const groups=[[ "🧾 通用",[doc,"手机+充电宝+充电线","少量现金与银行卡","常用药品与创可贴","离线地图/提前下载目的地"]]];
+  const sp=[];
+  if(t.includes("海滨"))sp.push(["🌊 海滨",["泳衣与速干衣","防晒霜SPF50+与晒后修复","墨镜与遮阳帽","拖鞋与防水手机袋"]]);
+  if(t.includes("雪山")||t.includes("徒步户外"))sp.push(["⛰️ 山野徒步",["冲锋衣裤与登山鞋","登山杖与头灯","保暖中间层与防晒"]]);
+  if(t.includes("冰雪"))sp.push(["❄️ 冰雪",["羽绒服与防滑雪地靴","暖宝宝与保温杯","墨镜防雪盲"]]);
+  if(t.includes("沙漠"))sp.push(["🏜️ 沙漠",["防沙鞋套与魔术头巾","润唇膏与保湿霜","早晚温差备外套"]]);
+  if(t.includes("温泉"))sp.push(["♨️ 温泉",["泳衣泳帽","便携洗漱包"]]);
+  if(t.includes("演出演艺"))sp.push(["🎤 演出",["官方平台提前购票","入场证件与充电宝"]]);
+  if(t.includes("边境风情"))sp.push(["🛂 边境",["边防证（户籍地或当地政务中心办理）"]]);
+  if(t.includes("摄影天堂"))sp.push(["📷 摄影",["备用存储卡与电池","三脚架（无人机先查禁飞区）"]]);
+  if(t.includes("亲子乐园"))sp.push(["👨‍👩‍👧 亲子",["儿童证件/身份证明","推车或背带"]]);
+  if(t.includes("美食"))sp.push(["🍜 吃货",["肠胃药与消食片","纸巾湿巾"]]);
+  if(["西藏","青海","四川","云南","甘肃"].includes(name))sp.push(["⛰️ 高海拔提示",["便携氧气瓶（当地超市有售）","红景天等（遵医嘱提前服用）","高原防晒与墨镜"]]);
+  if(sp.length)groups.push(...sp);
+  const season=d.bestSeason||"",si=[];
+  if(/冬|12-2|12月|1月|2月|滑雪|冰雪/.test(season))si.push("冬季保暖：羽绒服/帽子手套");
+  if(/夏|避暑|7-8|7月|8月/.test(season))si.push("夏季三件套：防晒/雨具/驱蚊");
+  if(si.length)groups.push(["🗓️ 按最佳季节",si]);
+  return groups;
+}
+function openPack(name){
+  packProv=name;
+  $("packTitle").textContent="🧳 出行清单 · "+name;
+  let saved={};try{saved=JSON.parse(localStorage.getItem("ctw_pack_"+name)||"{}");}catch(e){saved={};}
+  $("packBody").innerHTML=packGroups(name).map(g=>'<div class="pk-group">'+esc(g[0])+"</div>"+g[1].map(it=>'<label class="pk'+(saved[it]?" done":"")+'"><input type="checkbox" data-pkitem="'+esc(it)+'"'+(saved[it]?" checked":"")+"><span>"+esc(it)+"</span></label>").join("")).join("");
+  $("packModal").hidden=false;document.body.classList.add("modal-open");
+}
+$("packBody").addEventListener("change",e=>{
+  const cb=e.target.closest("input[data-pkitem]");if(!cb||!packProv)return;
+  let saved={};try{saved=JSON.parse(localStorage.getItem("ctw_pack_"+packProv)||"{}");}catch(err){saved={};}
+  saved[cb.dataset.pkitem]=cb.checked;
+  try{localStorage.setItem("ctw_pack_"+packProv,JSON.stringify(saved));}catch(err){}
+  cb.closest(".pk").classList.toggle("done",cb.checked);
+});
+$("pkCopy").addEventListener("click",()=>{
+  if(!packProv)return;
+  let saved={};try{saved=JSON.parse(localStorage.getItem("ctw_pack_"+packProv)||"{}");}catch(e){saved={};}
+  const lines=["🧳 "+packProv+" 出行清单（中国旅行宝典2026）"];
+  packGroups(packProv).forEach(g=>{lines.push("◆ "+g[0]);g[1].forEach(it=>lines.push((saved[it]?"[x] ":"[ ] ")+it));});
+  clip(lines.join("\n"));
+});
+$("pkClose").addEventListener("click",closeWish);
+$("packModal").addEventListener("click",e=>{if(e.target===$("packModal"))closeWish();});
+/* ---------- 启动 ---------- */
+if("scrollRestoration" in history)history.scrollRestoration="manual";
+try{setTheme(localStorage.getItem("ctw_theme")||"light");}catch(e){setTheme("light");}
+function syncHeights(){
+  const tb=document.querySelector(".topbar");
+  if(tb)document.documentElement.style.setProperty("--topbar-h",tb.offsetHeight+"px");
+  const nv=document.querySelector(".dnav");
+  document.documentElement.style.setProperty("--nav-h",nv?nv.offsetHeight+"px":"0px");
+}
+renderRegionChips();renderThemeChips();renderMonths();fillStats();updateFab();syncHeights();
+window.addEventListener("hashchange",route);
+route();
+</script>
+</body>
+</html>
