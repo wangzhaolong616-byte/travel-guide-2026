@@ -44,6 +44,10 @@ python build.py
 git add .
 git commit -m "更新四川内容：补充xx景点"
 git push
+
+# 6. 重要：让手机端 PWA 缓存刷新
+#    打开 sw.js，把第一行 CACHE 的版本号 +1（如 "ctw-v1" → "ctw-v2"），
+#    随本次提交一起推送。否则已安装用户的离线缓存不会更新。
 ```
 
 推送后 GitHub Pages 会在 **约 1 分钟内自动重新部署**，刷新在线版即可看到更新。

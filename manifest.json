@@ -1,0 +1,18 @@
+{
+  "name": "中国旅行宝典 2026",
+  "short_name": "旅行宝典",
+  "description": "34省×城市×区县三级交互式中国旅行攻略库：美食榜、景点榜、体验、路线、避坑、足迹地图、成就与智能出行清单。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#faf7f1",
+  "theme_color": "#c8442c",
+  "icons": [
+    { "src": "icons/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
