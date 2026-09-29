@@ -79,7 +79,9 @@ def main():
     out = os.path.join(BASE, "中国旅行宝典2026.html")
     with open(out, "w", encoding="utf-8") as fh:
         fh.write(html)
+    shutil.copyfile(out, os.path.join(BASE, "index.html"))
     print("省份%d 城市%d 区县板块%d 条目%d 大小%dKB" % (len(data), ncities, ndis, nitems, len(html) // 1024))
+    print("已同步离线版与 index.html（在线版入口）")
 
     for cand in [os.path.join(os.path.expanduser("~"), "Desktop"),
                  os.path.join(os.path.expanduser("~"), "OneDrive", "Desktop"),
